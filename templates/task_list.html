@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Tasks</h3>
+    <a href="{% url 'task_add' %}" class="btn btn-success">+ Add Task</a>
+</div>
+
+<!-- Desktop Table -->
+<div class="d-none d-md-block">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Project</th>
+                <th>Assigned To</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.project.name }}</td>
+                <td>{{ task.assigned_to }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.status }}</td>
+                <td class="d-flex gap-1">
+                    <a href="{% url 'task_edit' task.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{% url 'task_delete' task.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    {% if task.status != 'done' %}
+                        <a href="{% url 'task_mark_complete' task.pk %}" class="btn btn-sm btn-success">Complete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No tasks found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Mobile Cards -->
+<div class="d-md-none">
+    <div class="row g-3">
+        {% for task in tasks %}
+        <div class="col-12">
+            <div class="card shadow-sm p-3">
+                <h5 class="card-title">{{ task.title }}</h5>
+                <p class="mb-1"><strong>Project:</strong> {{ task.project.name }}</p>
+                <p class="mb-1"><strong>Assigned To:</strong> {{ task.assigned_to }}</p>
+                <p class="mb-1"><strong>Due Date:</strong> {{ task.due_date }}</p>
+                <p class="mb-1"><strong>Status:</strong> {{ task.status }}</p>
+                <div class="mt-2 d-flex flex-wrap gap-2">
+                    <a href="{% url 'task_edit' task.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{% url 'task_delete' task.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    {% if task.status != 'done' %}
+                        <a href="{% url 'task_mark_complete' task.pk %}" class="btn btn-sm btn-success">Complete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card shadow-sm p-3 text-center">
+                No tasks found
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

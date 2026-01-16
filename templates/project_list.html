@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Projects</h3>
+    <a href="{% url 'project_add' %}" class="btn btn-success">+ Add Project</a>
+</div>
+
+<!-- Desktop Table -->
+<div class="d-none d-md-block">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Client</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.name }}</td>
+                <td>{{ project.client_name }}</td>
+                <td>{{ project.start_date }}</td>
+                <td>{{ project.end_date }}</td>
+                <td>{{ project.status }}</td>
+                <td class="d-flex gap-1">
+                    <a href="{% url 'project_edit' project.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{% url 'project_delete' project.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    {% if project.status != 'completed' %}
+                        <a href="{% url 'project_mark_complete' project.pk %}" class="btn btn-sm btn-success">Complete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No projects found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Mobile Cards -->
+<div class="d-md-none">
+    <div class="row g-3">
+        {% for project in projects %}
+        <div class="col-12">
+            <div class="card shadow-sm p-3">
+                <h5 class="card-title">{{ project.name }}</h5>
+                <p class="mb-1"><strong>Client:</strong> {{ project.client_name }}</p>
+                <p class="mb-1"><strong>Start:</strong> {{ project.start_date }}</p>
+                <p class="mb-1"><strong>End:</strong> {{ project.end_date }}</p>
+                <p class="mb-1"><strong>Status:</strong> {{ project.status }}</p>
+                <div class="mt-2 d-flex flex-wrap gap-2">
+                    <a href="{% url 'project_edit' project.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{% url 'project_delete' project.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    {% if project.status != 'completed' %}
+                        <a href="{% url 'project_mark_complete' project.pk %}" class="btn btn-sm btn-success">Complete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card shadow-sm p-3 text-center">
+                No projects found
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

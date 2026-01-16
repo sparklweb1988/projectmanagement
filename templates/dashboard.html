@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <h3 class="mb-4 text-center">Dashboard</h3>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow text-center p-4" style="background-color:#0d6efd; color:white;">
+        <h5>Total Projects</h5>
+        <h2 class="display-5">{{ total_projects }}</h2>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow text-center p-4" style="background-color:#198754; color:white;">
+        <h5>Completed Projects</h5>
+        <h2 class="display-5">{{ completed_projects }}</h2>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow text-center p-4" style="background-color:#ffc107; color:black;">
+        <h5>Pending Tasks</h5>
+        <h2 class="display-5">{{ pending_tasks }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row g-4">
+    <!-- Project Status Bar Chart -->
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <h5 class="card-title text-center mb-3">Project Status</h5>
+        <div style="max-width:100%; height:300px; margin:auto;">
+          <canvas id="projectStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Status Pie Chart -->
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <h5 class="card-title text-center mb-3">Task Status</h5>
+        <div style="max-width:100%; height:250px; margin:auto;">
+          <canvas id="taskStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Chart.js Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Project Status Bar Chart
+  const projectCtx = document.getElementById('projectStatusChart').getContext('2d');
+  new Chart(projectCtx, {
+    type: 'bar',
+    data: {
+      labels: [{% for key in project_status_counts.keys %}'{{ key }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+      datasets: [{
+        label: 'Projects',
+        data: [{% for value in project_status_counts.values %}{{ value }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+        backgroundColor: [
+          {% for key in project_status_counts.keys %}
+            {% if key == 'completed' %}'#198754'{% elif key == 'planned' %}'#ffc107'{% else %}'#0d6efd'{% endif %}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        ]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, precision: 0 } },
+      maintainAspectRatio: false
+    }
+  });
+
+  // Task Status Pie Chart
+  const taskCtx = document.getElementById('taskStatusChart').getContext('2d');
+  new Chart(taskCtx, {
+    type: 'pie',
+    data: {
+      labels: [{% for key in task_status_counts.keys %}'{{ key }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+      datasets: [{
+        data: [{% for value in task_status_counts.values %}{{ value }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+        backgroundColor: ['#ffc107', '#0d6efd', '#198754']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+</script>
+{% endblock %}
