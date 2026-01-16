@@ -5,7 +5,7 @@ from .forms import ProjectForm, TaskForm
 
 
 
-@login_required
+
 def dashboard(request):
     company, created = Company.objects.get_or_create(
         owner=request.user,
@@ -68,7 +68,7 @@ def project_add(request):
 
 
 
-@login_required
+
 def project_edit(request, pk):
     company = get_object_or_404(Company, owner=request.user)
     project = get_object_or_404(Project, pk=pk, company=company)
@@ -83,7 +83,7 @@ def project_edit(request, pk):
 
 
 
-@login_required
+
 def project_delete(request, pk):
     company = get_object_or_404(Company, owner=request.user)
     project = get_object_or_404(Project, pk=pk, company=company)
@@ -104,7 +104,7 @@ def task_list(request):
 
 
 
-@login_required
+
 def task_add(request):
     company = get_object_or_404(Company, owner=request.user)
     if request.method == 'POST':
@@ -121,7 +121,7 @@ def task_add(request):
 
 
 
-@login_required
+
 def task_edit(request, pk):
     company = get_object_or_404(Company, owner=request.user)
     task = get_object_or_404(Task, pk=pk, company=company)
@@ -137,7 +137,7 @@ def task_edit(request, pk):
 
 
 
-@login_required
+
 def task_delete(request, pk):
     company = get_object_or_404(Company, owner=request.user)
     task = get_object_or_404(Task, pk=pk, company=company)
@@ -147,7 +147,7 @@ def task_delete(request, pk):
 
 
 
-@login_required
+
 def project_mark_complete(request, pk):
     company = get_object_or_404(Company, owner=request.user)
     project = get_object_or_404(Project, pk=pk, company=company)
@@ -155,7 +155,8 @@ def project_mark_complete(request, pk):
     project.save()
     return redirect('project_list')
 
-@login_required
+
+
 def task_mark_complete(request, pk):
     company = get_object_or_404(Company, owner=request.user)
     task = get_object_or_404(Task, pk=pk, company=company)
