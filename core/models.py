@@ -3,11 +3,19 @@ from django.contrib.auth.models import User
 
 class Company(models.Model):
     name = models.CharField(max_length=200)
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.name
+
+
 
 
 class Project(models.Model):
@@ -25,6 +33,9 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
 
 
 class Task(models.Model):
