@@ -100,7 +100,7 @@ def project_add(request):
 
 
 def project_edit(request, pk):
-    company = get_object_or_404(Company, owner=request.user)
+    company = get_current_company(request)
     project = get_object_or_404(Project, pk=pk, company=company)
 
     if request.method == 'POST':
@@ -116,7 +116,7 @@ def project_edit(request, pk):
 
 
 def project_delete(request, pk):
-    company = get_object_or_404(Company, owner=request.user)
+    company = get_current_company(request)
     project = get_object_or_404(Project, pk=pk, company=company)
     project.delete()
     return redirect('project_list')
@@ -124,7 +124,7 @@ def project_delete(request, pk):
 
 
 def project_mark_complete(request, pk):
-    company = get_object_or_404(Company, owner=request.user)
+    company = get_current_company(request)
     project = get_object_or_404(Project, pk=pk, company=company)
     project.status = 'completed'
     project.save()
@@ -161,7 +161,7 @@ def task_add(request):
 
 
 def task_edit(request, pk):
-    company = get_object_or_404(Company, owner=request.user)
+    company = get_current_company(request)
     task = get_object_or_404(Task, pk=pk, company=company)
 
     if request.method == 'POST':
@@ -177,7 +177,7 @@ def task_edit(request, pk):
 
 
 def task_delete(request, pk):
-    company = get_object_or_404(Company, owner=request.user)
+    company = get_current_company(request)
     task = get_object_or_404(Task, pk=pk, company=company)
     task.delete()
     return redirect('task_list')
@@ -185,7 +185,7 @@ def task_delete(request, pk):
 
 
 def task_mark_complete(request, pk):
-    company = get_object_or_404(Company, owner=request.user)
+    company = get_current_company(request)
     task = get_object_or_404(Task, pk=pk, company=company)
     task.status = 'done'
     task.save()
